@@ -21,9 +21,19 @@ public class UserService
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
-            throw new ApplicationException("Invalid Username or Password");
+            return null;
         }
         
         return user;
+    }
+    
+    public async Task<bool?> Register(string name, string email, string phone, string password)
+    {
+        await using var conn = _DatabaseFactory.Instance();
+        var userStore = new UserStore(conn);
+        var user = new User(name, email, phone, password);
+        var changes = await userStore.InsertAsync(user);
+
+        return changes > 0;
     }
 }

@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DevSAAS.Core.Identity\DevSAAS.Core.Identity.csproj" />
       <ProjectReference Include="..\DevSAAS.Core\DevSAAS.Core.csproj" />
     </ItemGroup>
 

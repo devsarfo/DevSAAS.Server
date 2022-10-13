@@ -4,8 +4,8 @@ public class User
 {
     protected User()
     {
-        this.Id = Guid.NewGuid().ToString();
-        this.CreatedAt = DateTime.UtcNow;
+        Id = Guid.NewGuid().ToString();
+        CreatedAt = DateTime.UtcNow;
     }
 
     public User(string photo, string firstName, string lastName, string dob, string gender, string email, string phone, string password, int active)
@@ -19,6 +19,14 @@ public class User
         Phone = phone;
         Password = password;
         Active = active;
+    }
+    
+    public User(string name, string email, string phone, string password)
+    {
+        Name = name;
+        Email = email;
+        Phone = phone;
+        Password = password;
     }
 
     public String Id { get; }

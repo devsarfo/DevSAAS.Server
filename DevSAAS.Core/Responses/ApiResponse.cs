@@ -20,4 +20,6 @@ public class ApiResponse<TRecord>
         this.Status = status;
         this.Message = message;
     }
+    
+    
 }
