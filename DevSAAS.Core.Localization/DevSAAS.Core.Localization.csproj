@@ -7,14 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Languages\en.json" />
+      <EmbeddedResource Include="Languages\en.json" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\DevSAAS.Core\DevSAAS.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
-      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.24.0" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
 </Project>

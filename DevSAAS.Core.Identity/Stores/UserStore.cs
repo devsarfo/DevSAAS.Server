@@ -24,4 +24,26 @@ public sealed class UserStore : Store<User>
 
         return Connection.QueryFirstOrDefaultAsync<User?>(statement, new { _username = username.Trim() });
     }
+    
+    public Task<User?> GetByEmailAsync(string value)
+    {
+        const string statement = @"
+                select u.*
+                from public.users u
+                where u.email = @_value;
+            ";
+
+        return Connection.QueryFirstOrDefaultAsync<User?>(statement, new { _value = value.Trim() });
+    }
+    
+    public Task<User?> GetByPhoneAsync(string value)
+    {
+        const string statement = @"
+                select u.*
+                from public.users u
+                where u.phone = @_value;
+            ";
+
+        return Connection.QueryFirstOrDefaultAsync<User?>(statement, new { _value = value.Trim() });
+    }
 }

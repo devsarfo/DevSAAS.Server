@@ -1,64 +1,50 @@
+using DevSAAS.Core.Helpers;
+
 namespace DevSAAS.Core.Identity.Entities;
 
 public class User
 {
-    protected User()
-    {
-        Id = Guid.NewGuid().ToString();
-        CreatedAt = DateTime.UtcNow;
-    }
+    private User() {}
 
-    public User(string photo, string firstName, string lastName, string dob, string gender, string email, string phone, string password, int active)
-    {
-        Photo = photo;
-        FirstName = firstName;
-        LastName = lastName;
-        Dob = dob;
-        Gender = gender;
-        Email = email;
-        Phone = phone;
-        Password = password;
-        Active = active;
-    }
-    
-    public User(string name, string email, string phone, string password)
+    public User(string name, string email, string phone, string password) : this()
     {
         Name = name;
         Email = email;
         Phone = phone;
-        Password = password;
+        Password = BCrypt.Net.BCrypt.HashPassword(password);
     }
 
-    public String Id { get; }
+    public string Id { get; } = Guid.NewGuid().ToString();
+
+    public string Photo { get; init; } = FileHelper.GetFilePath("files/default/png");
     
-    public string Photo { get; }
+    public string Name { get; init;  }
     
-    public string Name { get; }
+    public string FirstName { get; init;  }
     
-    public string FirstName { get; }
+    public string LastName { get; init;  }
     
-    public string LastName { get; }
+    public DateTime? Dob { get; init;  }
     
-    public string Dob { get; }
+    public string? Gender { get; init;  }
     
-    public string Gender { get; }
+    public string Email { get; init;  }
     
-    public string Email { get; }
+    public DateTime? EmailVerifiedAt { get; init;  }
     
-    public DateTime EmailVerifiedAt { get; }
+    public string Phone { get; init;  }
     
-    public string Phone { get; }
+    public DateTime? PhoneVerifiedAt { get; init;  }
     
-    public DateTime PhoneVerifiedAt { get; }
+    public string Password { get; init;  }
     
-    public string Password { get; }
+    public string Pin { get; init;  }
     
-    public string Pin { get; }
+    public int Active { get; init;  }
     
-    public int Active { get; }
-    public DateTime CreatedAt { get; }
+    public DateTime CreatedAt { get; } = DateTime.UtcNow;
     
-    public DateTime UpdatedAt { get; }
+    public DateTime? UpdatedAt { get; init;  }
     
-    public DateTime DeletedAt { get; }
+    public DateTime? DeletedAt { get; init;  }
 }

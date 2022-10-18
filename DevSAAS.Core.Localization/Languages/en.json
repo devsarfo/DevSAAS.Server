@@ -1,0 +1,10 @@
+{
+  "Title": "DevSAAS",
+  "Tagline": "", 
+  "Welcome": "Welcome",
+  "WelcomeTo": "Welcome to",
+  
+  
+  "LoginError": "Invalid Username or Password", 
+  "CreateError": "An error occured whiles creating :account" 
+}
