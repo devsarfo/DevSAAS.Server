@@ -3,8 +3,11 @@
   "Tagline": "", 
   "Welcome": "Welcome",
   "WelcomeTo": "Welcome to",
+  "Account": "Account",
   
-  
+  "ConfigurationNotFound": "Configuration not found",
+
   "LoginError": "Invalid Username or Password", 
-  "CreateError": "An error occured whiles creating :account" 
+  "CreateError": "An error occured whiles creating :object", 
+  "SendError": "An error occured whiles sending :object" 
 }

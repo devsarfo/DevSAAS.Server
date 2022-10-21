@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DevSAAS.Core.Notification\DevSAAS.Core.Notification.csproj" />
       <ProjectReference Include="..\DevSAAS.Core\DevSAAS.Core.csproj" />
     </ItemGroup>
 

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using DevSAAS.Core.Database;
 using DevSAAS.Core.Identity.Entities;
 using DevSAAS.Core.Identity.Stores;
+using DevSAAS.Core.Notification.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,14 +13,18 @@ public class AuthService
 {
     private readonly DatabaseFactory _databaseFactory;
     private readonly IConfiguration _configuration;
+    private SmsService _smsService;
+    private MailService _mailService;
 
-    public AuthService(DatabaseFactory databaseFactory, IConfiguration configuration)
+    public AuthService(DatabaseFactory databaseFactory, IConfiguration configuration, SmsService smsService, MailService mailService)
     {
         _databaseFactory = databaseFactory;
         _configuration = configuration;
+        _smsService = smsService;
+        _mailService = mailService;
     }
 
-    public async Task<User?> Login(string username, string password)
+    public async Task<User?> LoginAsync(string username, string password)
     {
         await using var conn = _databaseFactory.Instance();
         var userStore = new UserStore(conn);
@@ -33,36 +38,31 @@ public class AuthService
         return user;
     }
     
-    public async Task<bool> Register(string name, string email, string phone, string password)
+    public async Task<User?> RegisterAsync(string name, string email, string phone, string password)
     {
-        try
+        await using var conn = _databaseFactory.Instance();
+        var userStore = new UserStore(conn);
+        
+        //Check if E-mail exists
+        if (await userStore.GetByEmailAsync(email) is not null)
         {
-            await using var conn = _databaseFactory.Instance();
-            var userStore = new UserStore(conn);
+            throw new ApplicationException("E-mail Address Already Exists!");
+        }
         
-            //Check if e-mail exists
-            if (await userStore.GetByEmailAsync(email) is not null)
-            {
-                throw new ApplicationException("E-mail Address Already Exists!");
-            }
+        //Check if or Phone exists
+        if (await userStore.GetByPhoneAsync(phone) is not null)
+        {
+            throw new ApplicationException("Phone Number Already Exists!");
+        }
         
-            //Check if or phone exists
-            if (await userStore.GetByPhoneAsync(phone) is not null)
-            {
-                throw new ApplicationException("Phone Number Already Exists!");
-            }
-        
-            //Create User
-            var user = new User(name, email, phone, password);
-            var changes = await userStore.InsertAsync(user);
+        //Create User
+        var user = new User(name, email, phone, password);
+        var changes = await userStore.InsertAsync(user);
 
-            return changes > 0;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        // Send OTP
+        
+        
+        return changes > 0 ? user : null;
     }
 
     public string? CreateToken(User user)

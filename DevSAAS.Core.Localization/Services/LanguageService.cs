@@ -4,25 +4,19 @@ using Newtonsoft.Json.Linq;
 
 namespace DevSAAS.Core.Localization.Services;
 
-public sealed class LanguageService
+public static class LanguageService
 {
-    private readonly string _language;
-    private string _languages;
+    private static readonly Dictionary<string, JObject> Languages = new();
 
-    public LanguageService(string language = "en")
+    static LanguageService()
     {
-        _language = language;
-        Initialize().Wait();
-    }
-    
-    private async Task Initialize()
-    {
-        _languages = await EmbeddedResource.LoadResourceAsync("DevSAAS.Core.Localization.Languages."+_language+".json");
+        var str = EmbeddedResource.LoadResource("DevSAAS.Core.Localization.Languages.en.json");
+        var lang = JsonConvert.DeserializeObject<JObject>(str);
+        Languages.Add("en", lang!);
     }
 
-    public string Get(string key)
+    public static string Get(string key, string lang = "en")
     {
-        var lang = (JObject) JsonConvert.DeserializeObject(_languages);
-        return lang[key].Value<string>() ?? key;
+        return Languages[lang][key]?.ToString() ?? key;
     }
 }

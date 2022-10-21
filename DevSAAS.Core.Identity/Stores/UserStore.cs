@@ -9,10 +9,7 @@ namespace DevSAAS.Core.Identity.Stores;
 
 public sealed class UserStore : Store<User>
 {
-    public UserStore(IDbConnection conn) : base(conn, "users")
-    {
-        
-    }
+    public UserStore(IDbConnection conn) : base(conn, "users") { }
     
     public Task<User?> GetByUsernameAsync(string username)
     {
