@@ -6,19 +6,19 @@ using DevSAAS.Core.Notification.Interfaces;
 
 namespace DevSAAS.Core.Notification.Providers;
 
-public class Gmail : IMailProvider
+public class MailProvider : IMailProvider
 {
-    private const string _key = "gmail";
+    private readonly string _key;
     private readonly SettingStore _settingStore;
 
-    public Gmail(SettingStore settingStore)
+    public MailProvider(SettingStore settingStore, string key)
     {
         _settingStore = settingStore;
+        _key = key;
     }
     
     public async Task<bool> Send(string[] destinations, string subject, string message)
     {
-        
         var title = await _settingStore.GetByKeyAsync("title");
         var config = await _settingStore.GetByAllKeyAsync(_key);
         if (config == null)

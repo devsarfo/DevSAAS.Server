@@ -35,11 +35,7 @@ public class MailService
                 throw new Exception(LanguageService.Get("ConfigurationNotFound") + ": E-mail");
             }
 
-            var emailGateway = email.Value;
-            if (emailGateway.Equals("gmail", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return await new Gmail(settingStore).Send(destinations, subject, message);
-            }
+            return await new MailProvider(settingStore, email.Value).Send(destinations, subject, message);
         }
         catch (Exception e)
         {

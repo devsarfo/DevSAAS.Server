@@ -8,7 +8,7 @@ namespace DevSAAS.Core.Notification.Providers;
 
 public class SMSOnlineGH : ISmsProvider
 {
-    private const string _key = "smsonlinegh";
+    private const string Key = "smsonlinegh";
     private readonly SettingStore _settingStore;
 
     public SMSOnlineGH(SettingStore settingStore)
@@ -19,15 +19,15 @@ public class SMSOnlineGH : ISmsProvider
 
     public async Task<bool> Send(string[] destinations, string message)
     {
-        var config = await _settingStore.GetByAllKeyAsync(_key);
+        var config = await _settingStore.GetByAllKeyAsync(Key);
         if (config == null)
         {
             throw new Exception(LanguageService.Get("ConfigurationNotFound") + ": SMSOnlineGH");
         }
 
-        var senderId = config.First(c => c.Key == _key + "_sender_id").Value;
-        var apiKey = config.First(c => c.Key == _key + "_api_key").Value;
-        var baseUrl = config.First(c => c.Key == _key + "_base_url").Value;
+        var senderId = config.First(c => c.Key == Key + "_sender_id").Value;
+        var apiKey = config.First(c => c.Key == Key + "_api_key").Value;
+        var baseUrl = config.First(c => c.Key == Key + "_base_url").Value;
 
         using var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Accept.Add(
