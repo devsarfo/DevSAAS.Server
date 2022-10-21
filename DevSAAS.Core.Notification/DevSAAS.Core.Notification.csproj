@@ -12,4 +12,9 @@
       <ProjectReference Include="..\DevSAAS.Core\DevSAAS.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Templates\Verification\mail.html" />
+      <EmbeddedResource Include="Templates\VerificationCode\mail.html" />
+    </ItemGroup>
+
 </Project>

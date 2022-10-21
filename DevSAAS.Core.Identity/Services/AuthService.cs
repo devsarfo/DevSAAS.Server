@@ -4,6 +4,7 @@ using DevSAAS.Core.Database;
 using DevSAAS.Core.Identity.Entities;
 using DevSAAS.Core.Identity.Stores;
 using DevSAAS.Core.Notification.Services;
+using DevSAAS.Core.Notification.Templates.Verification;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -34,7 +35,7 @@ public class AuthService
         {
             return null;
         }
-        
+
         return user;
     }
     
@@ -60,8 +61,12 @@ public class AuthService
         var changes = await userStore.InsertAsync(user);
 
         // Send OTP
+        var otpStore = new OtpStore(conn);
+        var otp = await otpStore.GenerateCode(user.Id);
+
+        new VerificationCode(_smsService, _mailService, otp, user.Phone, user.Email).Send();
         
-        
+            
         return changes > 0 ? user : null;
     }
 

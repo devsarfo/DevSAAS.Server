@@ -38,7 +38,7 @@ public class MailProvider : IMailProvider
         {
             Host = smtpUrl,
             Port = int.Parse(smtpPort),
-            EnableSsl = true,
+            EnableSsl = bool.Parse(smtpSsl),
             DeliveryMethod = SmtpDeliveryMethod.Network,
             UseDefaultCredentials = false,
             Credentials = new NetworkCredential(smtpUsername, smtpPassword)
@@ -53,7 +53,8 @@ public class MailProvider : IMailProvider
         mailMessage.Subject = subject;
         mailMessage.From =  new MailAddress(senderEmail, senderName);
         mailMessage.Body = message;
-        smtpClient.Send(mailMessage);
+        mailMessage.IsBodyHtml = true;
+        smtpClient.SendAsync(mailMessage, null);
         
         //TODO: Handle results
         
