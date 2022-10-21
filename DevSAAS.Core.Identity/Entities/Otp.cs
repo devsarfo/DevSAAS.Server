@@ -15,8 +15,8 @@ public class Otp
     public string UserId { get; init;  }
     
     public string Code { get; init;  }
-    
-    public int Active { get; init;  }
+
+    public int Active { get; init; } = 1;
     
     public DateTime CreatedAt { get; } = DateTime.UtcNow;
     
