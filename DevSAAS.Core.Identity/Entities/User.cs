@@ -24,7 +24,7 @@ public class User
     
     public string LastName { get; init;  }
     
-    public DateTime? Dob { get; init;  }
+    public DateTime? DateOfBirth { get; init;  }
     
     public string? Gender { get; init;  }
     

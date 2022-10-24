@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using DevSAAS.Core.Database;
 using DevSAAS.Core.Identity.Entities;
 using DevSAAS.Core.Identity.Stores;
@@ -14,8 +15,8 @@ public class AuthService
 {
     private readonly DatabaseFactory _databaseFactory;
     private readonly IConfiguration _configuration;
-    private SmsService _smsService;
-    private MailService _mailService;
+    private readonly SmsService _smsService;
+    private readonly MailService _mailService;
 
     public AuthService(DatabaseFactory databaseFactory, IConfiguration configuration, SmsService smsService, MailService mailService)
     {
@@ -66,7 +67,6 @@ public class AuthService
 
         new VerificationCode(_smsService, _mailService, otp, user.Phone, user.Email).Send();
         
-            
         return changes > 0 ? user : null;
     }
 
@@ -74,19 +74,23 @@ public class AuthService
     {
         var claims = new List<Claim>
         {
-            new ("UserId", user.Id),
+            new ("Id", user.Id),
             new ("Photo", user.Photo),
             new ("Name", user.Name),
             new ("Email", user.Email),
             new ("Phone", user.Phone)
         };
-        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(
+            issuer: _configuration["Jwt:Issuer"],
+            audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddDays(1),
+            expires: DateTime.Now.AddMinutes(15),
             signingCredentials: credentials
         );
+        
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
         
         return jwt;
