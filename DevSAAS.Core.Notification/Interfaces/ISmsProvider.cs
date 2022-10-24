@@ -1,5 +1,3 @@
-using DevSAAS.Core.Configuration.Stores;
-
 namespace DevSAAS.Core.Notification.Interfaces;
 
 public interface ISmsProvider

@@ -1,24 +1,28 @@
 namespace DevSAAS.Core.Identity.Entities;
 
-public class Otp
+public class Role
 {
-    private Otp()
+    public Role()
     {
     }
 
-    public Otp(string userId, string code) : this()
+    public Role(string name, string code, int isDefault, int active)
     {
-        UserId = userId;
+        Name = name;
         Code = code;
+        IsDefault = isDefault;
+        Active = active;
     }
 
     public string Id { get; } = Guid.NewGuid().ToString();
 
-    public string UserId { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
     public string Code { get; set; } = string.Empty;
 
-    public int Active { get; set; } = 1;
+    public int IsDefault { get; set; }
+
+    public int Active { get; set; }
 
     public DateTime CreatedAt { get; } = DateTime.UtcNow;
 

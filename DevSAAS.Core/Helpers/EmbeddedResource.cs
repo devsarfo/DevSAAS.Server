@@ -5,8 +5,9 @@ namespace DevSAAS.Core.Helpers;
 
 public static class EmbeddedResource
 {
-    private static readonly ConcurrentDictionary<string, string> ResourceCache = new ConcurrentDictionary<string, string>();
-    
+    private static readonly ConcurrentDictionary<string, string> ResourceCache =
+        new ConcurrentDictionary<string, string>();
+
     public static Task<string> LoadResourceAsync(string resourceName)
     {
         if (HasResource(resourceName))
@@ -28,7 +29,7 @@ public static class EmbeddedResource
         var assembly = Assembly.GetCallingAssembly();
         return Load(assembly, resourceName);
     }
-    
+
     private static string Load(Assembly assembly, string resourceName)
     {
         if (ResourceCache.TryGetValue(resourceName, out var result)) return GetResource(resourceName);
@@ -36,7 +37,7 @@ public static class EmbeddedResource
         using var stream = assembly?.GetManifestResourceStream(resourceName);
         if (stream is null)
         {
-            throw  new FileNotFoundException($"Embedded resource {resourceName} not found") ;
+            throw new FileNotFoundException($"Embedded resource {resourceName} not found");
         }
 
         using var reader = new StreamReader(stream);
@@ -47,7 +48,7 @@ public static class EmbeddedResource
 
         return GetResource(resourceName);
     }
-    
+
     private static async Task<string> LoadAsync(Assembly assembly, string resourceName)
     {
         if (ResourceCache.TryGetValue(resourceName, out var result)) return GetResource(resourceName);
@@ -55,7 +56,7 @@ public static class EmbeddedResource
         await using var stream = assembly?.GetManifestResourceStream(resourceName);
         if (stream is null)
         {
-            throw  new FileNotFoundException($"Embedded resource {resourceName} not found") ;
+            throw new FileNotFoundException($"Embedded resource {resourceName} not found");
         }
 
         using var reader = new StreamReader(stream);
@@ -66,7 +67,7 @@ public static class EmbeddedResource
 
         return GetResource(resourceName);
     }
-    
+
     private static bool HasResource(string resourceName)
     {
         return ResourceCache.ContainsKey(resourceName);

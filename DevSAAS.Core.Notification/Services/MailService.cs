@@ -7,28 +7,28 @@ namespace DevSAAS.Core.Notification.Services;
 
 public class MailService
 {
-    private const string _key = "email_gateway";
+    private const string Key = "email_gateway";
     private readonly DatabaseFactory _databaseFactory;
-    
+
     public MailService(DatabaseFactory databaseFactory)
     {
         _databaseFactory = databaseFactory;
     }
-    
+
     public async Task<bool> SendAsync(string destination, string subject, string message)
     {
-        var destinations = new string[] { destination };
+        var destinations = new[] { destination };
         return await SendAsync(destinations, subject, message);
     }
-    
+
     public async Task<bool> SendAsync(string[] destinations, string subject, string message)
     {
         await using var conn = _databaseFactory.Instance();
-        
+
         try
         {
             var settingStore = new SettingStore(conn);
-            var email = await settingStore.GetByKeyAsync(_key);
+            var email = await settingStore.GetByKeyAsync(Key);
 
             if (email is null)
             {
@@ -41,7 +41,7 @@ public class MailService
         {
             Console.WriteLine(e);
         }
-        
+
         return false;
     }
 }

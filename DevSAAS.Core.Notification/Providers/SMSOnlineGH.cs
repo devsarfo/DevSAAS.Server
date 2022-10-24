@@ -15,7 +15,7 @@ public class SMSOnlineGH : ISmsProvider
     {
         _settingStore = settingStore;
     }
-    
+
 
     public async Task<bool> Send(string[] destinations, string message)
     {
@@ -54,10 +54,10 @@ public class SMSOnlineGH : ISmsProvider
         {
             throw new Exception(LanguageService.Get("SendError").Replace(":object", "SMSOnlineGH"));
         }
-        
+
         //TODO: Handle results
         // Console.WriteLine(await response.Content.ReadAsStringAsync());
-        
+
         return true;
     }
 }

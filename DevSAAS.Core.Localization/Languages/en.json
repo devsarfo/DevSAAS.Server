@@ -5,8 +5,11 @@
   "WelcomeTo": "Welcome to",
   "Account": "Account",
   
+  "AccountVerified": "Account verified successfully",
   "VerifyAccount": "Verify Account",
   "VerificationCode": "Verification Code",
+  "VerificationCodeSentPhone": "Verification code has been sent your phone number",
+  "VerificationCodeSentEmail": "Verification code has been sent your e-mail address",
   "VerificationSms": ":otp is your :title verification code. Do not share with anyone!",
   "ConfirmYourEmailAddress": "Confirm Your E-mail Address",
   "ConfirmYourEmailAddressHint": "Tap the button below to confirm your email address. If you didn't create an account with :title, you can safely delete this email.",
@@ -15,10 +18,13 @@
   "MailDisclaimer": "You received this email because we received a request for :action for your account. If you didn't request :action you can safely delete this email.",
   "ConfirmAccount": "Confirm Your Account",
   "ConfirmAccountHint": "To confirm your account, enter this verification code when prompted: ",
+  "PhoneAlreadyExists": "Phone number already exists",
 
   "ConfigurationNotFound": "Configuration not found",
 
   "LoginError": "Invalid Username or Password", 
   "CreateError": "An error occured whiles creating :object", 
-  "SendError": "An error occured whiles sending :object" 
+  "SendError": "An error occured whiles sending :object", 
+  "RecordNotFoundError": ":object was not found", 
+  "InvalidOtp": "Verification code is invalid" 
 }

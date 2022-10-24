@@ -1,14 +1,16 @@
 using System.Data;
 using Dapper;
 using DevSAAS.Core.Configuration.Entities;
-using DevSAAS.Core.Stores;
+using DevSAAS.Core.Database;
 
 namespace DevSAAS.Core.Configuration.Stores;
 
 public class SettingStore : Store<Setting>
 {
-    public SettingStore(IDbConnection conn) : base(conn, "settings") { }
-    
+    public SettingStore(IDbConnection conn) : base(conn, "settings")
+    {
+    }
+
     public Task<Setting?> GetByKeyAsync(string key)
     {
         const string statement = @"
@@ -19,7 +21,7 @@ public class SettingStore : Store<Setting>
 
         return Connection.QueryFirstOrDefaultAsync<Setting?>(statement, new { _key = key.Trim() });
     }
-    
+
     public Task<IEnumerable<Setting>> GetByAllKeyAsync(string key)
     {
         const string statement = @"
@@ -28,6 +30,6 @@ public class SettingStore : Store<Setting>
                 where s.key like @_key;
             ";
 
-        return Connection.QueryAsync<Setting>(statement, new { _key = key.Trim()  + "_%"});
+        return Connection.QueryAsync<Setting>(statement, new { _key = key.Trim() + "_%" });
     }
 }

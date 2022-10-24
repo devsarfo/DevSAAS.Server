@@ -4,12 +4,12 @@ namespace DevSAAS.Core.Helpers;
 
 public class Helper
 {
-    public static string RandomNumbers(int Length)
+    public static string RandomNumbers(int length)
     {
-        var Rand = new Random();
+        var rand = new Random();
         var stringBuilder = new StringBuilder();
-        for (var i = 0; i < Length; i++)
-            stringBuilder.Append(Rand.Next(0, 9));
+        for (var i = 0; i < length; i++)
+            stringBuilder.Append(rand.Next(0, 9));
 
         return stringBuilder.ToString();
     }

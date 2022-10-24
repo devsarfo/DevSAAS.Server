@@ -1,7 +1,6 @@
 using DevSAAS.Core.Database;
 using DevSAAS.Core.Identity.Entities;
 using DevSAAS.Core.Identity.Stores;
-using DevSAAS.Core.Localization.Services;
 
 namespace DevSAAS.Core.Identity.Services;
 

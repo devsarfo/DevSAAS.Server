@@ -4,8 +4,10 @@ namespace DevSAAS.Web.Auth.Responses;
 
 public class ProfileResponse
 {
-    public ProfileResponse() {}
-    
+    public ProfileResponse()
+    {
+    }
+
     public ProfileResponse(User user)
     {
         Id = user.Id;
@@ -24,32 +26,32 @@ public class ProfileResponse
         UpdatedAt = user.UpdatedAt;
     }
 
-     
-    public string Id { get;  }
-    
-    public string Photo { get;  }
-    
-    public string Name { get;   }
 
-    public string FirstName { get;  }
-    
-    public string LastName { get;  }
-    
-    public DateTime? DateOfBirth { get;  }
-    
-    public string? Gender { get;  }
-    
-    public string Email { get;  }
-    
-    public DateTime? EmailVerifiedAt { get;  }
-    
-    public string Phone { get;  }
-    
-    public DateTime? PhoneVerifiedAt { get;  }
-    
+    public string Id { get; }
+
+    public string Photo { get; }
+
+    public string Name { get; }
+
+    public string FirstName { get; }
+
+    public string LastName { get; }
+
+    public DateTime? DateOfBirth { get; }
+
+    public string? Gender { get; }
+
+    public string Email { get; }
+
+    public DateTime? EmailVerifiedAt { get; }
+
+    public string Phone { get; }
+
+    public DateTime? PhoneVerifiedAt { get; }
+
     public int Active { get; }
-    
-    public DateTime CreatedAt { get; } 
-    
-    public DateTime? UpdatedAt { get;  }
+
+    public DateTime CreatedAt { get; }
+
+    public DateTime? UpdatedAt { get; }
 }

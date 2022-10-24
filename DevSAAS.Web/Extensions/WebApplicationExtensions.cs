@@ -2,11 +2,9 @@ using System.Text;
 using DevSAAS.Core.Database;
 using DevSAAS.Core.Identity.Services;
 using DevSAAS.Core.Notification.Services;
-using DevSAAS.Web.Responses;
 using DevSAAS.Web.Validation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 
 namespace DevSAAS.Web.Extensions;
 
@@ -18,14 +16,16 @@ public static class WebApplicationExtensions
         builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
         {
             options.InvalidModelStateResponseFactory = RequestValidator.MakeValidationResponse;
-        }); 
-        
+        });
+
         builder.Services.AddSingleton<DatabaseFactory>();
         builder.Services.AddSingleton<SmsService>();
         builder.Services.AddSingleton<MailService>();
-        
+
         builder.Services.AddSingleton<AuthService>();
         builder.Services.AddSingleton<UserService>();
+        builder.Services.AddSingleton<OtpService>();
+        builder.Services.AddSingleton<RoleService>();
 
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {

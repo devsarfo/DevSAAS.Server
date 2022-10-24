@@ -4,7 +4,9 @@ namespace DevSAAS.Core.Identity.Entities;
 
 public class User
 {
-    private User() {}
+    private User()
+    {
+    }
 
     public User(string name, string email, string phone, string password) : this()
     {
@@ -16,35 +18,35 @@ public class User
 
     public string Id { get; } = Guid.NewGuid().ToString();
 
-    public string Photo { get; init; } = FileHelper.GetFilePath("files/default/png");
-    
-    public string Name { get; init;  }
-    
-    public string FirstName { get; init;  }
-    
-    public string LastName { get; init;  }
-    
-    public DateTime? DateOfBirth { get; init;  }
-    
-    public string? Gender { get; init;  }
-    
-    public string Email { get; init;  }
-    
-    public DateTime? EmailVerifiedAt { get; init;  }
-    
-    public string Phone { get; init;  }
-    
-    public DateTime? PhoneVerifiedAt { get; init;  }
-    
-    public string Password { get; init;  }
-    
-    public string Pin { get; init;  }
-    
-    public int Active { get; init;  }
-    
+    public string Photo { get; set; } = FileHelper.GetFilePath("files/default/png");
+
+    public string Name { get; set; } = string.Empty;
+
+    public string FirstName { get; set; } = string.Empty;
+
+    public string LastName { get; set; } = string.Empty;
+
+    public DateTime? DateOfBirth { get; set; }
+
+    public string? Gender { get; set; }
+
+    public string Email { get; set; } = string.Empty;
+
+    public DateTime? EmailVerifiedAt { get; set; }
+
+    public string Phone { get; set; } = string.Empty;
+
+    public DateTime? PhoneVerifiedAt { get; set; }
+
+    public string Password { get; set; } = string.Empty;
+
+    public string Pin { get; set; } = string.Empty;
+
+    public int Active { get; set; }
+
     public DateTime CreatedAt { get; } = DateTime.UtcNow;
-    
-    public DateTime? UpdatedAt { get; init;  }
-    
-    public DateTime? DeletedAt { get; init;  }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public DateTime? DeletedAt { get; set; }
 }

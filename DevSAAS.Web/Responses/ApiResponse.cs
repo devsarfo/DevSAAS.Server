@@ -5,9 +5,9 @@ namespace DevSAAS.Web.Responses;
 
 public class ApiResponse
 {
-    public string Status { get; }
-    
-    public string Message { get; }
+    public string Status { get; } = string.Empty;
+
+    public string Message { get; } = string.Empty;
 
     public ApiResponse(string status, string message)
     {
@@ -15,10 +15,10 @@ public class ApiResponse
         Message = message;
     }
 
-    public static IActionResult Send(int code, string status, string message) 
+    public static IActionResult Send(int code, string status, string message)
         => new ObjectResult(new ApiResponse(status, message)) { StatusCode = code };
 
-    public static IActionResult Send<TRecord>(int code, string status, string message, TRecord data) 
+    public static IActionResult Send<TRecord>(int code, string status, string message, TRecord data)
         => new ObjectResult(new ApiResponse<TRecord>(status, message, data)) { StatusCode = code };
 }
 
@@ -28,6 +28,6 @@ public sealed class ApiResponse<TRecord> : ApiResponse
     {
         Data = data;
     }
-    
+
     public TRecord? Data { get; }
 }

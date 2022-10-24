@@ -16,7 +16,7 @@ public class MailProvider : IMailProvider
         _settingStore = settingStore;
         _key = key;
     }
-    
+
     public async Task<bool> Send(string[] destinations, string subject, string message)
     {
         var title = await _settingStore.GetByKeyAsync("title");
@@ -33,7 +33,7 @@ public class MailProvider : IMailProvider
         var smtpUsername = config.First(c => c.Key == _key + "_smtp_username").Value;
         var smtpPassword = config.First(c => c.Key == _key + "_smtp_password").Value;
         var smtpSsl = config.First(c => c.Key == _key + "_smtp_ssl").Value;
-        
+
         var smtpClient = new SmtpClient
         {
             Host = smtpUrl,
@@ -51,13 +51,13 @@ public class MailProvider : IMailProvider
         }
 
         mailMessage.Subject = subject;
-        mailMessage.From =  new MailAddress(senderEmail, senderName);
+        mailMessage.From = new MailAddress(senderEmail, senderName);
         mailMessage.Body = message;
         mailMessage.IsBodyHtml = true;
         smtpClient.SendAsync(mailMessage, null);
-        
+
         //TODO: Handle results
-        
+
         return true;
     }
 }

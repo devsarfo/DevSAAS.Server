@@ -1,16 +1,16 @@
 using System.Data;
-using System.Data.Common;
 using Dapper;
 using DevSAAS.Core.Database;
 using DevSAAS.Core.Identity.Entities;
-using DevSAAS.Core.Stores;
 
 namespace DevSAAS.Core.Identity.Stores;
 
 public sealed class UserStore : Store<User>
 {
-    public UserStore(IDbConnection conn) : base(conn, "users") { }
-    
+    public UserStore(IDbConnection conn) : base(conn, "users")
+    {
+    }
+
     public Task<User?> GetByUsernameAsync(string username)
     {
         const string statement = @"
@@ -21,7 +21,7 @@ public sealed class UserStore : Store<User>
 
         return Connection.QueryFirstOrDefaultAsync<User?>(statement, new { _username = username.Trim() });
     }
-    
+
     public Task<User?> GetByEmailAsync(string value)
     {
         const string statement = @"
@@ -32,7 +32,7 @@ public sealed class UserStore : Store<User>
 
         return Connection.QueryFirstOrDefaultAsync<User?>(statement, new { _value = value.Trim() });
     }
-    
+
     public Task<User?> GetByPhoneAsync(string value)
     {
         const string statement = @"
@@ -42,5 +42,23 @@ public sealed class UserStore : Store<User>
             ";
 
         return Connection.QueryFirstOrDefaultAsync<User?>(statement, new { _value = value.Trim() });
+    }
+
+    public Task<bool> PhoneExistsAsync(string phone, string? userId)
+    {
+        var statement = userId == null
+            ? @"
+                select count(u.*)
+                from public.users u
+                where u.phone = @_phone;
+            "
+            : @"
+                select count(u.*)
+                from public.users u
+                where u.phone = @_phone and u.id != @_user_id;
+            ";
+
+        return Connection.QueryFirstOrDefaultAsync<bool>(statement,
+            new { _phone = phone.Trim(), _user_id = userId?.Trim() });
     }
 }

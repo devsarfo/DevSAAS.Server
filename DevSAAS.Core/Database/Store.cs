@@ -3,10 +3,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using Dapper;
-using DevSAAS.Core.Database;
 using Npgsql.NameTranslation;
 
-namespace DevSAAS.Core.Stores;
+namespace DevSAAS.Core.Database;
 
 public abstract class Store<TRecord> : Store where TRecord : class
 {
@@ -35,7 +34,7 @@ public abstract class Store<TRecord> : Store where TRecord : class
 
     private bool IsSqLiteDb => Connection.ConnectionString.Contains("Data Source=:memory:");
 
-    public Store.StatementBuilder<TRecord> StatementBuilder()
+    public StatementBuilder<TRecord> StatementBuilder()
     {
         return new();
     }
@@ -48,7 +47,7 @@ public abstract class Store<TRecord> : Store where TRecord : class
     }
 
     public Task<IEnumerable<TRecord>> GetAsync(IDictionary<string, object>? predicate = null)
-    {   
+    {
         var statement = this.BuildSelectStatement(predicate);
         return this.Connection.QueryAsync<TRecord>(statement, predicate);
     }
@@ -56,7 +55,7 @@ public abstract class Store<TRecord> : Store where TRecord : class
     public Task<IEnumerable<TRecord>> GetAsync(IEnumerable<string> ids)
     {
         string statement = $"select * from {this._tableName} where id = any(@_ids)";
-        return this.Connection.QueryAsync<TRecord>(statement, new {_ids = ids});
+        return this.Connection.QueryAsync<TRecord>(statement, new { _ids = ids });
     }
 
     public async Task<T?> GetAsync<T>(string id) where T : TRecord
@@ -67,14 +66,14 @@ public abstract class Store<TRecord> : Store where TRecord : class
     }
 
     public Task<IEnumerable<T>> GetAsync<T>(IDictionary<string, object>? predicate = null) where T : TRecord
-    {   
+    {
         var statement = this.BuildSelectStatement(predicate);
         return this.Connection.QueryAsync<T>(statement, predicate);
     }
 
     public virtual Task<int> InsertAsync(TRecord row, InsertConflictHandler? onConflict = null)
     {
-        return this.InsertAsync(new[] {row}, onConflict);
+        return this.InsertAsync(new[] { row }, onConflict);
     }
 
     public virtual async Task<int> InsertAsync(IEnumerable<TRecord> rows, InsertConflictHandler? onConflict = null)
@@ -86,7 +85,7 @@ public abstract class Store<TRecord> : Store where TRecord : class
 
     public virtual Task<int> UpdateAsync(TRecord row, params string[] fieldsToUpdate)
     {
-        return this.UpdateAsync(new[] {row}, fieldsToUpdate);
+        return this.UpdateAsync(new[] { row }, fieldsToUpdate);
     }
 
     public virtual async Task<int> UpdateAsync(IEnumerable<TRecord> rows, params string[] fieldsToUpdate)
@@ -98,15 +97,15 @@ public abstract class Store<TRecord> : Store where TRecord : class
 
     public virtual Task<int> DeleteAsync(string id, bool confirm = false)
     {
-        var param = new {_id = id, _confirm = confirm};
-        return confirm 
+        var param = new { _id = id, _confirm = confirm };
+        return confirm
             ? this.Connection.ExecuteAsync($"delete from {this.TableName} where @_confirm and id=@_id", param)
             : Task.FromResult(0);
     }
 
     private string BuildSelectStatement(IDictionary<string, object>? predicate = null)
     {
-        string cacheKey = $"select_{this.TableName}";
+        var cacheKey = $"select_{this.TableName}";
 
         if (predicate is not null && predicate.Count > 0)
         {
@@ -152,7 +151,7 @@ public abstract class Store<TRecord> : Store where TRecord : class
 
         var separator = ",";
         var props = typeof(TRecord).GetProperties()
-            .Where(x => x.PropertyType != typeof(SerialInt32) && 
+            .Where(x => x.PropertyType != typeof(SerialInt32) &&
                         x.PropertyType != typeof(SerialInt64))
             .ToArray();
 
@@ -171,7 +170,8 @@ public abstract class Store<TRecord> : Store where TRecord : class
             {
                 case UpsertOnConflictHandler upsert when upsert.IgnoreFields.Contains(snakeCaseName):
                     continue;
-                case UpsertOnConflictHandler {UpdateFields: { }} upsert when !upsert.UpdateFields!.Contains(snakeCaseName):
+                case UpsertOnConflictHandler { UpdateFields: { } } upsert
+                    when !upsert.UpdateFields!.Contains(snakeCaseName):
                     continue;
                 case UpsertOnConflictHandler:
                 {
@@ -187,7 +187,7 @@ public abstract class Store<TRecord> : Store where TRecord : class
         var strBuilder = new StringBuilder($"insert into {this.TableName}({sqlProps}) values({clrProps})");
         if (onConflict is not null)
         {
-            if (upsertProps.Length > 0 &&  !IsSqLiteDb)
+            if (upsertProps.Length > 0 && !IsSqLiteDb)
             {
                 strBuilder.Append(onConflict.ConflictType == ConflictType.Constraint
                     ? $" on conflict on constraint {onConflict.Constraint} "
@@ -208,7 +208,7 @@ public abstract class Store<TRecord> : Store where TRecord : class
 
     private string BuildUpdateStatement(string[]? fieldsToUpdate = null)
     {
-        string key = $"update_{this.TableName}";
+        var key = $"update_{this.TableName}";
 
         if (fieldsToUpdate is not null && fieldsToUpdate.Length > 0)
         {
@@ -224,7 +224,7 @@ public abstract class Store<TRecord> : Store where TRecord : class
                 .GetProperties()
                 .Where(x => !x.Name.Equals("id", StringComparison.InvariantCultureIgnoreCase) ||
                             !x.Name.Equals("createdAt", StringComparison.InvariantCultureIgnoreCase))
-                .Where(x => x.PropertyType != typeof(SerialInt32) && 
+                .Where(x => x.PropertyType != typeof(SerialInt32) &&
                             x.PropertyType != typeof(SerialInt64))
                 .Select(x => x.Name)
                 .ToArray();
@@ -234,7 +234,8 @@ public abstract class Store<TRecord> : Store where TRecord : class
         for (var i = 0; i < fieldsToUpdate.Length; i++)
         {
             if (i == fieldsToUpdate.Length - 1) separator = ' ';
-            strProps.Append(NpgsqlSnakeCaseNameTranslator.ConvertToSnakeCase(fieldsToUpdate[i]) + '=' + '@' + fieldsToUpdate[i] + separator);
+            strProps.Append(NpgsqlSnakeCaseNameTranslator.ConvertToSnakeCase(fieldsToUpdate[i]) + '=' + '@' +
+                            fieldsToUpdate[i] + separator);
         }
 
         var result = $"update {this.TableName} set {strProps} where id=@Id";
@@ -266,11 +267,12 @@ public sealed class IgnoreOnConflictHandler : InsertConflictHandler
 
 public sealed class UpsertOnConflictHandler : InsertConflictHandler
 {
-    public UpsertOnConflictHandler(ConflictType conflictType, string constraint = "id", 
-        IEnumerable<string>? updateFields = null, IEnumerable<string>? ignoreFields = null) : base(conflictType, constraint)
+    public UpsertOnConflictHandler(ConflictType conflictType, string constraint = "id",
+        IEnumerable<string>? updateFields = null, IEnumerable<string>? ignoreFields = null) : base(conflictType,
+        constraint)
     {
         this.UpdateFields = updateFields;
-        this.IgnoreFields = ignoreFields ?? new[] {"id", "created_at"};
+        this.IgnoreFields = ignoreFields ?? new[] { "id", "created_at" };
     }
 
     public IEnumerable<string>? UpdateFields { get; }
@@ -390,7 +392,7 @@ public abstract class Store
                 str.Append($"{key}=@{key}");
                 i++;
             }
-            
+
             return $"{str}";
         }
     }
