@@ -29,7 +29,8 @@ builder.Services.AddSwaggerGen(option =>
                 {
                     Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
-                }
+                },
+                In = ParameterLocation.Header,
             },
             new string[] { }
         }
