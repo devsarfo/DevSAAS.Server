@@ -42,6 +42,15 @@ public static class WebApplicationExtensions
             };
         });
 
+        
+        builder.Services.AddCors(p => p.AddPolicy("AllowAny", policyBuilder =>
+        {
+            policyBuilder.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .SetIsOriginAllowed(host => true);
+        }));
+
         return builder;
     }
 }

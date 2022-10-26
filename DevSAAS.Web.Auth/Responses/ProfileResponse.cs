@@ -4,9 +4,7 @@ namespace DevSAAS.Web.Auth.Responses;
 
 public class ProfileResponse
 {
-    public ProfileResponse()
-    {
-    }
+    public ProfileResponse() { }
 
     public ProfileResponse(User user)
     {
@@ -27,25 +25,25 @@ public class ProfileResponse
     }
 
 
-    public string Id { get; }
+    public string Id { get; } = string.Empty;
 
-    public string Photo { get; }
+    public string Photo { get; } = string.Empty;
 
-    public string Name { get; }
+    public string Name { get; } = string.Empty;
 
-    public string FirstName { get; }
+    public string FirstName { get; } = string.Empty;
 
-    public string LastName { get; }
+    public string LastName { get; } = string.Empty;
 
     public DateTime? DateOfBirth { get; }
 
-    public string? Gender { get; }
+    public string? Gender { get; } = string.Empty;
 
-    public string Email { get; }
+    public string Email { get; } = string.Empty;
 
     public DateTime? EmailVerifiedAt { get; }
 
-    public string Phone { get; }
+    public string Phone { get; } = string.Empty;
 
     public DateTime? PhoneVerifiedAt { get; }
 

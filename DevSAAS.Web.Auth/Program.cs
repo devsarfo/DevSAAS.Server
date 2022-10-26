@@ -1,4 +1,5 @@
 using DevSAAS.Web.Extensions;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,7 +47,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection(); NGINX Handles SSL
+
+app.UseCors("AllowAny");
 
 app.UseAuthentication();
 

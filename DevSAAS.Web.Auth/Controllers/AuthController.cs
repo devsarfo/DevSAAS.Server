@@ -8,28 +8,36 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DevSAAS.Web.Auth.Controllers;
 
-[Route("auth")]
+[Route("/")]
 [ApiController]
 public class AuthController : ControllerBase
 {
     private readonly AuthService _authService;
     private readonly UserService _userService;
+    private readonly RoleService _roleService;
     private readonly OtpService _otpService;
 
-    public AuthController(AuthService authService, UserService userService, OtpService otpService)
+    public AuthController(AuthService authService, UserService userService, OtpService otpService, RoleService roleService)
     {
         _authService = authService;
         _userService = userService;
         _otpService = otpService;
+        _roleService = roleService;
     }
 
+    [HttpGet]
+    public ContentResult Index()
+    {
+        return base.Content("<h1>API is up and running. Read <a href='swagger/index.html'>Docs</a></1>", "text/html");
+    }
+    
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] Login credentials)
     {
         var user = await _authService.LoginAsync(credentials.Username, credentials.Password);
         if (user is null)
         {
-            return ApiResponse.Send(404, "error", LanguageService.Get("LoginError"));
+            return ApiResponse.Send(400, "error", LanguageService.Get("LoginError"));
         }
 
         var token = _authService.CreateToken(user);
@@ -68,10 +76,7 @@ public class AuthController : ControllerBase
         try
         {
             var user = await _authService.GetUserAsync(HttpContext);
-            return user is null
-                ? ApiResponse.Send(500, "error",
-                    LanguageService.Get("RecordNotFound").Replace(":object", LanguageService.Get("Account")))
-                : ApiResponse.Send(200, "success", "Profile Loaded", new ProfileResponse(user));
+            return user is null ? ApiResponse.Send(500, "error", LanguageService.Get("RecordNotFound").Replace(":object", LanguageService.Get("Account"))) : ApiResponse.Send(200, "success", "Profile Loaded", new ProfileResponse(user));
         }
         catch (Exception e)
         {
@@ -117,6 +122,7 @@ public class AuthController : ControllerBase
 
             var resend = await _otpService.Resend(user.Id, resendOtp.Phone);
 
+            
             return resend
                 ? ApiResponse.Send(200, "success", LanguageService.Get("VerificationCodeSentPhone"))
                 : ApiResponse.Send(400, "error",
