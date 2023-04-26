@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text;
 using DevSAAS.Core.Database;
 using DevSAAS.Core.Identity.Services;
@@ -34,7 +33,7 @@ public static class WebApplicationExtensions
             {
                 ValidIssuer = builder.Configuration["Jwt:Issuer"],
                 ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,

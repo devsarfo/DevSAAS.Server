@@ -39,7 +39,7 @@ public class SmsService
 
             if (smsGateway.Equals("smsonlinegh", StringComparison.InvariantCultureIgnoreCase))
             {
-                return await new SMSOnlineGH(settingStore).Send(destinations, message);
+                return await new SmsOnlineGh(settingStore).Send(destinations, message);
             }
         }
         catch (Exception e)

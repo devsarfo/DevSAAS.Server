@@ -19,8 +19,8 @@ public static class RequestValidator
                 var errorMessage = GetErrorMessage(errors[0]);
                 data.Add(new Error
                 {
-                    field = keyModelStatePair.Key,
-                    message = errorMessage
+                    Field = keyModelStatePair.Key,
+                    Message = errorMessage
                 });
             }
             else
@@ -31,8 +31,8 @@ public static class RequestValidator
                     errorMessages[i] = GetErrorMessage(errors[i]);
                     data.Add(new Error
                     {
-                        field = keyModelStatePair.Key,
-                        message = errorMessages[i],
+                        Field = keyModelStatePair.Key,
+                        Message = errorMessages[i],
                     });
                 }
             }
@@ -53,6 +53,6 @@ public static class RequestValidator
 
 public class Error
 {
-    public string field { get; set; } = string.Empty;
-    public string message { get; set; } = string.Empty;
+    public string Field { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
 }

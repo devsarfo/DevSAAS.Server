@@ -1,17 +1,16 @@
 using System.Net.Http.Headers;
-using System.Text.Json;
 using DevSAAS.Core.Configuration.Stores;
 using DevSAAS.Core.Localization.Services;
 using DevSAAS.Core.Notification.Interfaces;
 
 namespace DevSAAS.Core.Notification.Providers;
 
-public class SMSOnlineGH : ISmsProvider
+public class SmsOnlineGh : ISmsProvider
 {
     private const string Key = "smsonlinegh";
     private readonly SettingStore _settingStore;
 
-    public SMSOnlineGH(SettingStore settingStore)
+    public SmsOnlineGh(SettingStore settingStore)
     {
         _settingStore = settingStore;
     }

@@ -1,5 +1,4 @@
 using DevSAAS.Web.Extensions;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,9 +30,9 @@ builder.Services.AddSwaggerGen(option =>
                     Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
                 },
-                In = ParameterLocation.Header,
+                In = ParameterLocation.Header
             },
-            new string[] { }
+            Array.Empty<string>()
         }
     });
 });
