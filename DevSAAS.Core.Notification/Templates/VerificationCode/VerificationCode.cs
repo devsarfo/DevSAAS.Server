@@ -10,7 +10,7 @@ public class VerificationCode
     private readonly MailService? _mailService;
     private readonly string _code, _phone, _email;
 
-    public VerificationCode(SmsService smsService, MailService mailService, string code, string phone, string email)
+    public VerificationCode(SmsService? smsService, MailService? mailService, string code, string phone, string email)
     {
         _smsService = smsService;
         _mailService = mailService;

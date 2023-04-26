@@ -6,7 +6,7 @@ public class Setting
     {
     }
 
-    public Setting(string type, string element, string label, string key, string value, string options = null) : this()
+    public Setting(string type, string element, string label, string key, string value, string? options) : this()
     {
         Type = type;
         Element = element;
